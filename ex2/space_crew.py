@@ -138,7 +138,7 @@ def main() -> None:
         paul = CrewMember(
             member_id="568_rtfg",
             name="Alice Johnson",
-            rank=CrewRank.commander,
+            rank=CrewRank.cadet,
             age=27,
             specialization="Engineering",
             years_experience=5,

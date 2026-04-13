@@ -58,8 +58,8 @@ def main() -> None:
     print(f"ID: {valid.contact_id}")
     print(f"Type: {valid.contact_type.name}")
     print(f"Location: {valid.location}")
-    print(f"Signal: {valid.signal_strength}")
-    print(f"Duration: {valid.duration_minutes}")
+    print(f"Signal: {valid.signal_strength}/10")
+    print(f"Duration: {valid.duration_minutes} minutes")
     print(f"Witnesses: {valid.witness_count}")
     print(f"Message: {valid.message_received}")
     print("\n======================================")
@@ -78,7 +78,7 @@ def main() -> None:
         )
     except ValidationError as e:
         for error in e.errors():
-            print(error["msg"])
+            print(error["msg"].replace("Value error, ", ""))
     if invalid is not None:
         print("no mistakes detected for the second batch")
 

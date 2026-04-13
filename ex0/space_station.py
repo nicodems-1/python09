@@ -31,7 +31,7 @@ def main() -> None:
         print(e)
     print(f"ID: {valid_space.station_id}")
     print(f"Name: {valid_space.name}")
-    print(f"Crew:{valid_space.crew_size} people")
+    print(f"Crew: {valid_space.crew_size} people")
     print(f"Power: {valid_space.power_level}%")
     print(f"Oxygen:{valid_space.oxygen_level}%")
     print("Status:", end="")
@@ -54,7 +54,7 @@ def main() -> None:
         print(f"ID: {invalid_space.station_id}")
     except ValidationError as e:
         for error in e.errors():
-            print(error["msg"])
+            print(error["msg"].replace("Value error, ", ""))
 
 
 if __name__ == "__main__":

@@ -157,7 +157,7 @@ def main() -> None:
         )
     except ValidationError as e:
         for error in e.errors():
-            print(error["msg"])
+            print(error["msg"].replace("Value error, ", ""))
     if invalid_mission is not None:
         print("no mistakes detected for the second batch")
 

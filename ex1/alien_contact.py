@@ -1,5 +1,5 @@
-from pydantic import BaseModel, Field, model_validator  # type: ignore
-from datetime import date
+from pydantic import BaseModel, Field, model_validator, ValidationError
+from datetime import datetime
 from typing import Optional
 from typing_extensions import Self
 from enum import Enum
@@ -14,7 +14,7 @@ class ContactTypes(Enum):
 
 class BaseStation(BaseModel):
     contact_id: str = Field(min_length=5, max_length=15)
-    timestamp: date
+    timestamp: datetime
     location: str = Field(min_length=3, max_length=100)
     contact_type: Enum
     signal_strength: float = Field(ge=0.0, le=10.0)
@@ -44,7 +44,7 @@ def main() -> None:
     try:
         valid = BaseStation(
             contact_id="AC_2024-001",
-            timestamp="2023-01-01",
+            timestamp=datetime.now(),
             contact_type=ContactTypes.radio,
             location="Area 51, Nevada",
             signal_strength=8.5,
@@ -68,7 +68,7 @@ def main() -> None:
     try:
         invalid = BaseStation(
             contact_id="AC_2024-001",
-            timestamp="2023-01-01",
+            timestamp=datetime.now(),
             contact_type=ContactTypes.telepathic,
             location="Area 51, Nevada",
             signal_strength=8.5,
@@ -76,8 +76,9 @@ def main() -> None:
             witness_count=2,
             message_received="Greetings from Zeta Reticuli",
         )
-    except ValueError as e:
-        print(e)
+    except ValidationError as e:
+        for error in e.errors():
+            print(error["msg"])
     if invalid is not None:
         print("no mistakes detected for the second batch")
 

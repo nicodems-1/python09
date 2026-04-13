@@ -1,7 +1,7 @@
 from enum import Enum
 from typing_extensions import Self
-from pydantic import BaseModel, Field, model_validator  # type: ignore
-from datetime import date
+from pydantic import BaseModel, Field, model_validator, ValidationError
+from datetime import datetime
 
 
 class CrewRank(Enum):
@@ -26,7 +26,7 @@ class SpaceMission(BaseModel):
     mission_id: str = Field(min_length=5, max_length=15)
     mission_name: str = Field(min_length=3, max_length=300)
     destination: str = Field(min_length=3, max_length=50)
-    lauch_date: date
+    lauch_date: datetime
     duration_days: int = Field(ge=1, le=3560)
     crew: list
     mission_status: str = Field(default="planned")
@@ -91,8 +91,8 @@ def main() -> None:
         mission_id="M2024_MARS",
         mission_name="Mars Colony Establishment",
         destination="Mars",
-        lauch_date="2089-01-02",
-        duration_days="900",
+        lauch_date=datetime.now(),
+        duration_days=900,
         crew=crew_people,
         mission_status="planned",
         budget_millions=2500.0,
@@ -149,14 +149,15 @@ def main() -> None:
             mission_id="M2024_MARS",
             mission_name="Mars Colony Establishment",
             destination="Mars",
-            lauch_date="2089-01-02",
-            duration_days="900",
+            lauch_date=datetime.now(),
+            duration_days=900,
             crew=crew_people,
             mission_status="planned",
             budget_millions=2500.0,
         )
-    except ValueError as e:
-        print(e)
+    except ValidationError as e:
+        for error in e.errors():
+            print(error["msg"])
     if invalid_mission is not None:
         print("no mistakes detected for the second batch")
 
